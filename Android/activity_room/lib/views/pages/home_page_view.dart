@@ -1,17 +1,28 @@
 import 'package:activity_room/consts/consts.dart';
 import 'package:activity_room/services/auth_service.dart';
 import 'package:activity_room/services/database_service.dart';
+import 'package:activity_room/services/notification_api.dart';
 import 'package:activity_room/views/pages/qr_scan_page.dart';
 import 'package:activity_room/views/widgets/profile_container.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class HomePageView extends StatelessWidget {
+class HomePageView extends StatefulWidget {
   HomePageView({Key? key}) : super(key: key);
+
+  @override
+  State<HomePageView> createState() => _HomePageViewState();
+}
+
+class _HomePageViewState extends State<HomePageView> {
   final CollectionReference userDataCollection =
       FirebaseFirestore.instance.collection('users');
+
   final TextEditingController _codeControlller = TextEditingController();
+
+  final FocusNode focusNode = FocusNode();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,7 +79,8 @@ class HomePageView extends StatelessWidget {
                       borderRadius: BorderRadius.circular(30),
                       color: Colors.transparent,
                     ),
-                    child: TextField(
+                    child: TextFormField(
+                      focusNode: focusNode,
                       controller: _codeControlller,
                       decoration: InputDecoration(
                         border: InputBorder.none,
@@ -86,10 +98,10 @@ class HomePageView extends StatelessWidget {
                     child: Padding(
                   padding: const EdgeInsets.only(top: 22.0),
                   child: ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       if (_codeControlller.text.length == 6) {
                         DatabaseService()
-                            .addRoomCodeToDB(_codeControlller.text);
+                            .addRoomCodeToDB(_codeControlller.text, context);
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             backgroundColor: MyColors().homepagecolor,
@@ -102,13 +114,13 @@ class HomePageView extends StatelessWidget {
                       style: TextStyle(fontSize: 17),
                     ),
                     style: ElevatedButton.styleFrom(
-                        minimumSize: const Size(135, 35),
+                        minimumSize: const Size(135, 40),
                         primary: MyColors().homepagecolor),
                   ),
                 )),
                 Center(
                     child: Padding(
-                  padding: const EdgeInsets.only(top: 18.0),
+                  padding: const EdgeInsets.only(top: 15.0),
                   child: Text("OR",
                       style: GoogleFonts.lato(
                           fontSize: 25,
@@ -117,15 +129,21 @@ class HomePageView extends StatelessWidget {
                 )),
                 Center(
                     child: Padding(
-                  padding: const EdgeInsets.only(top: 18.0),
+                  padding: const EdgeInsets.only(top: 15.0),
                   child: ElevatedButton(
-                    onPressed: () => Navigator.of(context).push(
-                        MaterialPageRoute(
-                            builder: (context) => const QRViewPage())),
+                    onPressed: () async {
+                      if (focusNode.hasPrimaryFocus) {
+                        focusNode.unfocus();
+                        await Future.delayed(Duration(seconds: 1));
+                      }
+
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const QRViewPage()));
+                    },
                     child: const Text('Scan QR Code',
                         style: TextStyle(fontSize: 17)),
                     style: ElevatedButton.styleFrom(
-                        minimumSize: const Size(120, 35),
+                        minimumSize: const Size(120, 40),
                         primary: MyColors().homepagecolor),
                   ),
                 ))
@@ -135,5 +153,12 @@ class HomePageView extends StatelessWidget {
         ],
       )),
     );
+  }
+
+  @override
+  void dispose() {
+    focusNode.dispose();
+    _codeControlller.dispose();
+    super.dispose();
   }
 }

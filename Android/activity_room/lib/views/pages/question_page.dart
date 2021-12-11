@@ -9,8 +9,11 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class QuestionPage extends StatefulWidget {
-  const QuestionPage({Key? key, required this.roomCode}) : super(key: key);
+  const QuestionPage(
+      {Key? key, required this.roomCode, required this.scoresMap})
+      : super(key: key);
   final String roomCode;
+  final Map<String, dynamic> scoresMap;
 
   @override
   State<QuestionPage> createState() => _QuestionPageState();
@@ -20,56 +23,100 @@ class _QuestionPageState extends State<QuestionPage> {
   final QuestionController questionController = Get.find();
   @override
   void initState() {
-    // startTimer();
     FirebaseFirestore.instance
-        .collection('live')
+        .collection('classroom')
         .doc(widget.roomCode)
+        .collection('questionLive')
+        .doc('1')
         .snapshots()
-        .listen((event) {
+        .listen((event) async {
+      print(event.data());
       if (event.data() != null) {
-        final String? temp = questionController.questionData.value.question;
-        questionController.questionData.value =
-            Question.fromSnapshot(event.data() as Map<String, dynamic>);
-        print(questionController.questionData.value.question! + temp!);
-        if (temp == '') {
-          print("stream started;");
-        } else if (questionController.questionData.value.question!
-                .compareTo(temp) !=
-            0) {
-          questionController.questionChanges();
-          QuestionWidget().createState().initState();
+        if (event.data()!.isNotEmpty) {
+          final String? temp = questionController.questionData.value.id;
+          // print(temp);
+          questionController.questionData.value =
+              Question.fromSnapshot(event.data() as Map<String, dynamic>);
+          print(questionController.questionData.value.id! + temp!);
+          // await checkIfAnswered(
+          //     questionController.questionData.value.id!, questionController);
+          bool val = await DatabaseService().getIsAttempted() ?? false;
+          print(val);
+          if (temp == '' && val) {
+            questionController.isAnswered.value = true;
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: const Text(
+                "This question is already attempted!",
+                style: TextStyle(color: Colors.white),
+              ),
+              backgroundColor: MyColors().homepagecolor,
+            ));
+          } else if (temp == '' && !val) {
+            print("Question not solved and app restared");
+          } else if (questionController.questionData.value.id!
+                  .compareTo(temp) !=
+              0) {
+            questionController.questionChanges();
+            if (val) {
+              QuestionWidget(
+                scoresMap: widget.scoresMap,
+              ).createState().initState();
+            }
+          }
+        } else {
+          questionController.questionData.value.id = '';
         }
       }
     });
-    print("initstate");
     super.initState();
   }
+
+  // Future<void> checkIfAnswered(
+  //     String? idFromDB, QuestionController questionController) async {
+  //   bool? id = await DatabaseService().getIsAttempted();
+  //   if (id! && questionController.questionData.value.id == '') {
+  //     questionController.questionData.value.id == '';
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //         const SnackBar(content: Text("This question is already attempted!")));
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
     print("room code ${widget.roomCode}");
     return Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: Color(0xFFEBF0FC),
         appBar: AppBar(
-          backgroundColor: MyColors().homepagecolor,
-          leading: BackButton(),
-          title: Text("Questions"),
+          backgroundColor: Color(0xFFEBF0FC),
+          elevation: 0.0,
+          leading: BackButton(
+            color: MyColors().homepagecolor,
+          ),
+          title: Text("Questions",
+              style: TextStyle(
+                color: MyColors().homepagecolor,
+              )),
         ),
         body: GetX<QuestionController>(builder: (controller) {
-          if (controller.questionData.value.question != '') {
-            return QuestionWidget();
+          if (controller.questionData.value.id != '') {
+            return QuestionWidget(
+              scoresMap: widget.scoresMap,
+            );
           } else {
-            return Center(
-                child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Image.asset('assets/no_questions.jpg'),
-                Text(
-                  "No questions given yet!",
-                  style: TextStyle(fontSize: 18, color: Color(0xFF2A1C65)),
-                )
-              ],
-            ));
+            return Scaffold(
+              backgroundColor: Colors.white,
+              body: Center(
+                  child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Image.asset('assets/no_questions.png'),
+                  Text(
+                    "No questions given yet!",
+                    style: TextStyle(fontSize: 18, color: Color(0xFF2A1C65)),
+                  )
+                ],
+              )),
+            );
           }
         }
             // return Center(

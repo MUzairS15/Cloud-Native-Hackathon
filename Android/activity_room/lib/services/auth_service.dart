@@ -43,11 +43,13 @@ class AuthService {
     if (userCredential.additionalUserInfo!.isNewUser) {
       myuser.User usr = DatabaseService().makeUserForDB(
           userCredential.user!.displayName.toString(),
-          "sign in with google",
+          "Enter Your PRN here!",
           userCredential.user!.email.toString());
       DatabaseService().addUserToDB(usr);
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text("Please add your PRN number in Profile tab")));
+        content: Text("Please add your PRN number in Profile tab"),
+        duration: Duration(seconds: 5),
+      ));
     }
 
     // Once signed in, return the UserCredential

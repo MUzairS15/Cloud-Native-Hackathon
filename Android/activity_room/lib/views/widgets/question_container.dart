@@ -1,13 +1,14 @@
 import 'dart:async';
 
+import 'package:activity_room/consts/consts.dart';
 import 'package:activity_room/controllers/question_controller.dart';
 import 'package:activity_room/views/widgets/option_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class QuestionWidget extends StatefulWidget {
-  QuestionWidget({Key? key}) : super(key: key);
-
+  const QuestionWidget({Key? key, required this.scoresMap}) : super(key: key);
+  final Map<String, dynamic> scoresMap;
   @override
   State<QuestionWidget> createState() => _QuestionWidgetState();
 }
@@ -40,7 +41,7 @@ class _QuestionWidgetState extends State<QuestionWidget> {
     return GetX<QuestionController>(builder: (controller) {
       return Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Row(
@@ -49,47 +50,39 @@ class _QuestionWidgetState extends State<QuestionWidget> {
               children: [
                 Padding(
                   padding: const EdgeInsets.only(left: 15.0, top: 15),
-                  child: Text("Time used : ${controller.secondsTimer.value} s",
-                      style: TextStyle(fontSize: 16)),
+                  child: Text(
+                      "Time Elapsed : ${controller.secondsTimer.value} s",
+                      style: TextStyle(
+                          fontSize: 16,
+                          color: MyColors().homepagecolor,
+                          fontWeight: FontWeight.bold)),
                 ),
                 Padding(
                   padding: EdgeInsets.only(right: 15.0, top: 15),
                   child: Text("Points : ${controller.questionData.value.score}",
-                      style: TextStyle(fontSize: 16)),
+                      style: TextStyle(
+                          fontSize: 16,
+                          color: MyColors().homepagecolor,
+                          fontWeight: FontWeight.bold)),
                 )
               ],
             ),
             SizedBox(
-                width: MediaQuery.of(context).size.width * 0.8,
+                width: MediaQuery.of(context).size.width * 0.9,
                 height: 170,
-                child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 15.0, left: 10.0),
                   child: Text(
                     controller.questionData.value.question.toString(),
                     softWrap: true,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 30),
+                    textAlign: TextAlign.start,
+                    maxLines: 6,
+                    style: TextStyle(fontSize: 25),
                   ),
                 )),
             OptionButton(
-                buttonText: controller.questionData.value.option1.toString(),
-                buttonColor: controller.colorListButton[0],
-                textColor: controller.colorListText[0],
-                index: 0),
-            OptionButton(
-                buttonText: controller.questionData.value.option2.toString(),
-                buttonColor: controller.colorListButton[1],
-                textColor: controller.colorListText[1],
-                index: 1),
-            OptionButton(
-                buttonText: controller.questionData.value.option3.toString(),
-                buttonColor: controller.colorListButton[2],
-                textColor: controller.colorListText[2],
-                index: 2),
-            OptionButton(
-                buttonText: controller.questionData.value.option4.toString(),
-                buttonColor: controller.colorListButton[3],
-                textColor: controller.colorListText[3],
-                index: 3),
+              scoresMap: widget.scoresMap,
+            ),
             SizedBox(
               height: 12.0,
             )

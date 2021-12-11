@@ -44,10 +44,14 @@ dependencies:
   circular_profile_avatar: ^2.0.5
   qr_code_scanner: ^0.6.1
   get: ^4.3.8
+  font_awesome_flutter: ^9.2.0
+  shared_preferences: ^2.0.8
+  awesome_notifications: ^0.6.17
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_native_splash: ^1.3.1
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

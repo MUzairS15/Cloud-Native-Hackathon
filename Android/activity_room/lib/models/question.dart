@@ -1,4 +1,6 @@
 class Question {
+  String? id;
+  String? type;
   String? question;
   String? option1;
   String? option2;
@@ -8,6 +10,8 @@ class Question {
   int score;
 
   Question({
+    required this.id,
+    required this.type,
     required this.question,
     required this.option1,
     required this.option2,
@@ -19,6 +23,8 @@ class Question {
 
   factory Question.fromSnapshot(Map data) {
     return Question(
+        id: data['id'],
+        type: data['type'],
         question: data['question'],
         option1: data['option1'],
         option2: data['option2'],

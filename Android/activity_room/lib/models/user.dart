@@ -5,8 +5,9 @@ class User {
   String? uid;
   bool isAttendingClass;
   String? roomCode;
+  String? roomSubject;
   bool isTeacher;
-  int score;
+  Map<String, dynamic> scores;
 
   User(
       {required this.name,
@@ -14,7 +15,8 @@ class User {
       required this.email,
       required this.uid,
       this.roomCode = '',
+      this.roomSubject = '',
       this.isAttendingClass = false,
       this.isTeacher = false,
-      this.score = 0});
+      required this.scores});
 }

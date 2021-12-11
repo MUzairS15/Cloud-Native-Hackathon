@@ -108,14 +108,7 @@ class _AttendencePageState extends State<AttendencePage> {
   }
 
   markAttendence(Barcode? result) async {
-    if (result!.code!.length != 6) {
-      await controller!.pauseCamera();
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          backgroundColor: MyColors().homepagecolor,
-          duration: const Duration(seconds: 2),
-          content: const Text("Incorrect Code, Try again!")));
-      Navigator.of(context).pop();
-    } else {
+    if (currentTimeInSeconds() - double.parse(result!.code!) < 11) {
       await controller!.pauseCamera();
       User user = await DatabaseService().getUserData();
       print(user.email.toString() +
@@ -137,6 +130,13 @@ class _AttendencePageState extends State<AttendencePage> {
           duration: const Duration(seconds: 2),
           content: const Text("Attendance Marked!")));
       Navigator.of(context).pop();
+    } else {
+      await controller!.pauseCamera();
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          backgroundColor: MyColors().homepagecolor,
+          duration: const Duration(seconds: 2),
+          content: const Text("Invalid Code, Try again!")));
+      Navigator.of(context).pop();
     }
   }
 
@@ -147,6 +147,11 @@ class _AttendencePageState extends State<AttendencePage> {
         const SnackBar(content: Text('No Permission')),
       );
     }
+  }
+
+  double currentTimeInSeconds() {
+    var ms = (DateTime.now()).millisecondsSinceEpoch;
+    return (ms / 1000);
   }
 
   @override

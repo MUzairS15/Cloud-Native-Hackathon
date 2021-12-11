@@ -3,6 +3,7 @@ import 'package:activity_room/models/question.dart';
 import 'package:activity_room/services/auth_service.dart';
 import 'package:activity_room/services/database_service.dart';
 import 'package:activity_room/services/notification_api.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -14,7 +15,8 @@ class QuestionController extends GetxController {
   var isAnswered = false.obs;
   var secondsTimer = 0.obs;
   var totalScore = 0.obs;
-
+  var type = 'no type'.obs;
+  var isTimerOn = false.obs;
   var questionData = Question(
           type: '',
           question: '',
@@ -33,7 +35,15 @@ class QuestionController extends GetxController {
     isAnswered.value = true;
     if (selectedOption == questionData.value.answer) {
       String sub = await DatabaseService().getSubject();
-      scoresMap[sub] = questionData.value.score + totalScore.value;
+      scoresMap = await DatabaseService()
+          .userDataCollection
+          .doc(AuthService().getUID)
+          .get()
+          .then((DocumentSnapshot value) {
+        return value['scores'];
+      });
+      print(scoresMap);
+      scoresMap[sub] = questionData.value.score + scoresMap[sub];
       DatabaseService()
           .userDataCollection
           .doc(AuthService().getUID)
@@ -41,11 +51,13 @@ class QuestionController extends GetxController {
 
       print("Your Answer is correct!");
       print(questionData.value);
-      DatabaseService().saveIsAttempted(isAnswered.value);
+      String? roomCode = await DatabaseService().getRoomCode();
+      DatabaseService().saveIsAttempted(isAnswered.value, roomCode);
       await DatabaseService().sendResponseToDB(true, secondsTimer.value);
     } else {
       print("your answer is wrong. correct is ${questionData.value.answer}");
-      DatabaseService().saveIsAttempted(isAnswered.value);
+      String? roomCode = await DatabaseService().getRoomCode();
+      DatabaseService().saveIsAttempted(isAnswered.value, roomCode);
       await DatabaseService().sendResponseToDB(false, secondsTimer.value);
     }
   }
@@ -69,7 +81,8 @@ class QuestionController extends GetxController {
     String sub = await DatabaseService().getSubject();
     await NotificationApi().showNotification(
         'key', sub.toString(), 'New Question has been added!');
-    DatabaseService().saveIsAttempted(false);
+    String? roomCode = await DatabaseService().getRoomCode();
+    DatabaseService().saveIsAttempted(false, roomCode);
     print(colorListButton);
   }
 

@@ -26,10 +26,6 @@ Future<void> main() async {
   runApp(const MyApp());
 }
 
-// double currentTimeInSeconds() {
-//   var ms = (DateTime.now()).millisecondsSinceEpoch;
-//   return (ms / 1000);
-// }
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 

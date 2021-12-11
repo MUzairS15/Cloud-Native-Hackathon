@@ -17,14 +17,17 @@ class _QuestionWidgetState extends State<QuestionWidget> {
   final QuestionController controller = Get.find();
 
   void startTimer() {
-    if (controller.secondsTimer.value == 0) {
+    if (controller.secondsTimer.value == 0 && !controller.isTimerOn.value) {
+      controller.isTimerOn.value = true;
       Timer.periodic(const Duration(seconds: 1), (t) {
         if (controller.secondsTimer.value > 600) {
           t.cancel();
+          controller.isTimerOn.value = false;
         } else if (!controller.isAnswered.value) {
           controller.secondsTimer.value += 1;
         } else {
           t.cancel();
+          controller.isTimerOn.value = false;
         }
       });
     }

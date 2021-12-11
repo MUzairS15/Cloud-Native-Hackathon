@@ -5,6 +5,7 @@ import 'package:activity_room/services/database_service.dart';
 import 'package:activity_room/views/widgets/question_container.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -34,15 +35,19 @@ class _QuestionPageState extends State<QuestionPage> {
       if (event.data() != null) {
         if (event.data()!.isNotEmpty) {
           final String? temp = questionController.questionData.value.question;
-          // print(temp);
+
           questionController.questionData.value =
               Question.fromSnapshot(event.data() as Map<String, dynamic>);
           print(questionController.questionData.value.question! + temp!);
           // await checkIfAnswered(
           //     questionController.questionData.value.id!, questionController);
-          bool val = await DatabaseService().getIsAttempted() ?? false;
+          bool val =
+              await DatabaseService().getIsAttempted(widget.roomCode) ?? false;
           print(val);
-          if (temp == '' && val) {
+          if (questionController.questionData.value.question == 'test') {
+            questionController.isAnswered.value = true;
+            print("initial question");
+          } else if (temp == '' && val) {
             questionController.isAnswered.value = true;
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: const Text(
@@ -54,20 +59,22 @@ class _QuestionPageState extends State<QuestionPage> {
           } else if (temp == '' && !val) {
             print("Question not solved and app restared");
           } else if (questionController.questionData.value.question!
-                  .compareTo(temp) !=
-              0) {
+                      .compareTo(temp) !=
+                  0 &&
+              questionController.questionData.value.question != 'test' &&
+              questionController.questionData.value.question != '') {
             questionController.questionChanges();
-            if (val) {
-              QuestionWidget(
-                scoresMap: widget.scoresMap,
-              ).createState().initState();
-            }
+
+            QuestionWidget(
+              scoresMap: widget.scoresMap,
+            ).createState().initState();
           }
         } else {
           questionController.questionData.value.question = '';
         }
       }
     });
+
     super.initState();
   }
 
@@ -98,7 +105,8 @@ class _QuestionPageState extends State<QuestionPage> {
               )),
         ),
         body: GetX<QuestionController>(builder: (controller) {
-          if (controller.questionData.value.question != '') {
+          if (controller.questionData.value.question != '' &&
+              controller.questionData.value.answer != '') {
             return QuestionWidget(
               scoresMap: widget.scoresMap,
             );

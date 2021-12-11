@@ -177,13 +177,13 @@ class DatabaseService {
     }, SetOptions(merge: true));
   }
 
-  void saveIsAttempted(bool val) async {
+  void saveIsAttempted(bool val, String roomCode) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    await sharedPreferences.setBool('isAttempted', val);
+    await sharedPreferences.setBool(roomCode, val);
   }
 
-  Future<bool?> getIsAttempted() async {
+  Future<bool?> getIsAttempted(String roomCode) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    return sharedPreferences.getBool('isAttempted');
+    return sharedPreferences.getBool(roomCode);
   }
 }

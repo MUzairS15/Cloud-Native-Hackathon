@@ -16,7 +16,6 @@ class QuestionController extends GetxController {
   var totalScore = 0.obs;
 
   var questionData = Question(
-          id: '',
           type: '',
           question: '',
           option1: '',
@@ -41,15 +40,13 @@ class QuestionController extends GetxController {
           .update({'scores': scoresMap});
 
       print("Your Answer is correct!");
-      print(questionData.value.id);
+      print(questionData.value);
       DatabaseService().saveIsAttempted(isAnswered.value);
-      await DatabaseService().sendResponseToDB(
-          questionData.value.id ?? 'null', true, secondsTimer.value);
+      await DatabaseService().sendResponseToDB(true, secondsTimer.value);
     } else {
       print("your answer is wrong. correct is ${questionData.value.answer}");
       DatabaseService().saveIsAttempted(isAnswered.value);
-      await DatabaseService().sendResponseToDB(
-          questionData.value.id ?? 'null', false, secondsTimer.value);
+      await DatabaseService().sendResponseToDB(false, secondsTimer.value);
     }
   }
 

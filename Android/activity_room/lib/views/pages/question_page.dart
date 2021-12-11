@@ -33,11 +33,11 @@ class _QuestionPageState extends State<QuestionPage> {
       print(event.data());
       if (event.data() != null) {
         if (event.data()!.isNotEmpty) {
-          final String? temp = questionController.questionData.value.id;
+          final String? temp = questionController.questionData.value.question;
           // print(temp);
           questionController.questionData.value =
               Question.fromSnapshot(event.data() as Map<String, dynamic>);
-          print(questionController.questionData.value.id! + temp!);
+          print(questionController.questionData.value.question! + temp!);
           // await checkIfAnswered(
           //     questionController.questionData.value.id!, questionController);
           bool val = await DatabaseService().getIsAttempted() ?? false;
@@ -53,7 +53,7 @@ class _QuestionPageState extends State<QuestionPage> {
             ));
           } else if (temp == '' && !val) {
             print("Question not solved and app restared");
-          } else if (questionController.questionData.value.id!
+          } else if (questionController.questionData.value.question!
                   .compareTo(temp) !=
               0) {
             questionController.questionChanges();
@@ -64,7 +64,7 @@ class _QuestionPageState extends State<QuestionPage> {
             }
           }
         } else {
-          questionController.questionData.value.id = '';
+          questionController.questionData.value.question = '';
         }
       }
     });
@@ -98,7 +98,7 @@ class _QuestionPageState extends State<QuestionPage> {
               )),
         ),
         body: GetX<QuestionController>(builder: (controller) {
-          if (controller.questionData.value.id != '') {
+          if (controller.questionData.value.question != '') {
             return QuestionWidget(
               scoresMap: widget.scoresMap,
             );

@@ -159,8 +159,7 @@ class DatabaseService {
         (time.hour + 1).toString());
   }
 
-  Future<void> sendResponseToDB(
-      String questionID, bool isCorrect, int timeElapsed) async {
+  Future<void> sendResponseToDB(bool isCorrect, int timeElapsed) async {
     String roomCode = await getRoomCode();
     User user = await getUserData();
     await classroomCollection
@@ -173,10 +172,8 @@ class DatabaseService {
       'Name': user.name,
       'PRN': user.prn,
       'Email': user.email,
-      questionID: {
-        'answer': isCorrect,
-        'time': timeElapsed,
-      }
+      'answer': isCorrect,
+      'time': timeElapsed,
     }, SetOptions(merge: true));
   }
 

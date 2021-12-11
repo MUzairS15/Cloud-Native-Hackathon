@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "430066997977",
+    "project_id": "activityroom-bd2bd",
+    "storage_bucket": "activityroom-bd2bd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:430066997977:android:82f3686589db04d0e23cc8",
+        "android_client_info": {
+          "package_name": "com.example.activity_room"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "430066997977-cpsoousjqi4u303mstchq19fggrq196p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.activity_room",
+            "certificate_hash": "b8f8262131d03e3be546268abbff9c61f998b6fd"
+          }
+        },
+        {
+          "client_id": "430066997977-kr5tsahj5qrokci37727ds5jk4l3gkaf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBGvCBrvP1r0ozpmjSz8OvCnQ0Gp6D7FLA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "430066997977-kr5tsahj5qrokci37727ds5jk4l3gkaf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

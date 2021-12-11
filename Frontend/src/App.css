@@ -1,0 +1,189 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+.form{
+  width: 50%;
+  margin: auto;
+}
+
+body{
+  background: #36D1DC;
+  background: -webkit-linear-gradient(to right, #5B86E5, #36D1DC); 
+  background: linear-gradient(to right, #5B86E5, #36D1DC);
+  background: white;
+  margin-top: 0%;
+}
+
+.title-page{
+  font-size: 4rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.4%;
+}
+
+.main-inputs{
+  width: 30%;
+  height: 65%;
+  overflow: auto;
+  margin: auto;
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
+  background: white; 
+  border-radius: 20px;
+  border: 3px solid black;
+}
+
+.login{
+  height: 50%;
+}
+
+.main-inputs .form-elem {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 1%;
+    margin-left: 0%;
+    margin-right: 0%;
+}
+
+button{
+    margin: 3%;
+}
+
+.svg-bind{
+  padding: 4px;
+  background-color: rgb(231, 223, 223);
+  border: 2px solid black;
+  border-right: none;
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+
+}
+input[type="text"]{
+    background: rgb(231, 223, 223);
+    padding: 4px;
+    border: 2px solid black;
+    border-left: none;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+input[type="email"]{
+  background: rgb(231, 223, 223);
+  padding: 4px;
+  border: 2px solid black;
+  border-left: none;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+input[type="text"]:focus{
+  outline:none ;
+}
+input[type="email"]:focus{
+  outline:none ;
+}
+input[type="password"]{
+  background: rgb(231, 223, 223);
+  padding: 4px;
+  border: 2px solid black;
+  border-left: none;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+input[type="password"]:focus{
+    outline:none ;
+}
+
+button{
+  background-color: #3b6cd4;
+  color: white;
+  outline: none;
+  border: 1 px solid black;
+  border-radius: 5px;
+  width: 30%;
+  font-weight: 600;
+}
+
+@media screen and (max-width: 900px) {
+  .main-inputs{ 
+    width: 50%;
+    height: 65%;
+  }
+}
+
+@media screen and (max-height: 580px) {
+  .title-page { visibility: hidden; }
+  .main-inputs{height: 75%;}
+}
+
+.login{
+  height: 50%;
+}
+
+.choices{
+
+  position: relative;
+  margin: 0;
+  margin-bottom: 15%;
+  top:-1px;
+}
+
+input[type="radio"]{
+  display:none;
+}
+.choices label{
+  display: inline-block;
+  background-color: #ddd;
+  padding: 5% 0%;
+  font-family: Arial;
+  font-size: 130%;
+  cursor: pointer;
+  width: 50%;
+  text-align: center;
+  border-bottom: 3px solid black;
+  margin: 0;
+}
+
+.choices input[type="radio"]:checked+label {
+  background: #4b6cb7;
+  background: -webkit-linear-gradient(to right, #182848, #4b6cb7); 
+  background: linear-gradient(to right, #182848, #4b6cb7);
+  color: white;
+}
+
+

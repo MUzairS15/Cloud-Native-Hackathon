@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<script>
+
+    let obj = [
+         // "id": doc.id,
+         {"question": "doc.data().question",
+        "option1" : "doc.data().option1",
+        "option2" : "doc.data().option2",
+        "option3" : "doc.data().option3",
+        "option4" : "doc.data().option4",
+        "correctAns": "doc.data().correctAns",
+        "type":" doc.data().type",
+        "sub": "req.body.sub"}
+    ]
+    let valh = [];
+    obj.forEach(function(val){
+        valh.push(Object.values(val))
+    })
+    console.log(valh)
+
+    var csv = "Name,Value\n";
+    valh.forEach(function(val){
+        csv += val;
+        csv += "\n";
+    })
+    // console.log(csv)
+    document.write(csv);
+
+      
+    var hiddenElement = document.createElement('a');  
+    hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);  
+    hiddenElement.target = '_blank';  
+      
+    //provide the name for the CSV file to be downloaded  
+    hiddenElement.download = 'Famous Personalities.csv';  
+    hiddenElement.click();  
+</script>
+<body>
+    
+</body>
+</html>

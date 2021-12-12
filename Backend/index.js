@@ -1,7 +1,7 @@
 
 const express = require('express');
 const db = require('./database');
-const port = 8080;
+const port = 80;
 const app = express();
 
 app.use(express.json());

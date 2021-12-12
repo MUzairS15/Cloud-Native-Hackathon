@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+spec:
+  selector:
+    matchLabels:
+      app: dashboard
+      tier: frontend
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: dashboard
+        tier: frontend
+    spec:
+      containers:
+       - name: admin-dashboard
+         image: muzairs/classroom:latest
+         imagePullPolicy: Always
+         ports:
+          - containerPort: 80
+  
+         
+

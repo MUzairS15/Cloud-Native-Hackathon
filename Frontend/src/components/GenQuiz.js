@@ -17,29 +17,38 @@ const GenQuiz = function (props) {
             "option4" : formRef.current[4].value,
             "correctAns": formRef.current[5].value,
         }];
-        const response = await fetch('/api/quiz/addQuestion', {
-            method: 'POST',
-            headers: {
-               "auth-token": localStorage.getItem('auth-token'),                
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-            body: JSON.stringify({ 
-               "question": formData,
-               "code": localStorage.getItem('current-code'),
-                "sub": localStorage.getItem("current-sub"),
-                "type": "mcq"
+        const code = localStorage.getItem('current-code');
+        const sub = localStorage.getItem("current-sub");
+        if(code != undefined && sub != undefined) {
+
+            const response = 
+            await fetch('/api/quiz/addQuestion', {
+                method: 'POST',
+                headers: {
+                    "auth-token": localStorage.getItem('auth-token'),                
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({ 
+                    "question": formData,
+                    "code": code,
+                    "sub": sub,
+                    "type": "mcq"
+                })
             })
-        })
-   
-        const success = await response.json();
-        if (success === "success") {
-            alert('Posted Successfully');
+            
+            const success = await response.json();
+            if (success === "success") {
+                alert('Posted Successfully');
+            } else {
+                alert('Some error Occured');
+            }
+            setResource(resource=>resource.concat(formData))
         } else {
-            alert('Some error Occured');
-        }
-        setResource(resource=>resource.concat(formData))
+            alert('Please select class from home section');
+        } 
     }
+    
 
     return (
         <div className="d-flex flex-grow-1 w-100">

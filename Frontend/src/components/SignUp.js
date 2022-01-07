@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 
-function SignUp(props) {
+function SignUp({prop}) {
 
-    const {handleCreate} = props
+    const handleCreate = prop
     return(
             <form id="forms" onSubmit = {(e)=>{handleCreate(e)}}>
                 <div className="form-elem">
@@ -70,6 +70,6 @@ function SignUp(props) {
 }
 
 SignUp.propTypes = {
-    props: PropTypes.func
+    prop: PropTypes.func
 }
 export default SignUp;

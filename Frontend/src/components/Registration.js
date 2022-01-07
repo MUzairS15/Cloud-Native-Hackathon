@@ -79,7 +79,7 @@ function Registration() {
                             <input type="radio" id="radio2" name="tabs" value="signup" onChange={onChange} defaultChecked={state === "SignUp"}></input>
                             <label id="lab2" htmlFor="radio2">Sign Up</label>
                         </div>
-                        <Login handleSubmit={handleSubmit} />
+                        <Login prop = {handleSubmit} />
                     </div>
                 </section>
             </>
@@ -99,7 +99,7 @@ function Registration() {
                         <input type="radio" id="radio2" name="tabs" value="signup" onChange={onChange} ></input>
                         <label id="lab2" htmlFor="radio2">Sign Up</label>
                     </div>
-                    <SignUp handleCreate = {handleCreate} />
+                    <SignUp prop = {handleCreate} />
            </div>
             </section>
 

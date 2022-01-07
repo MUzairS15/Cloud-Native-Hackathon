@@ -1,8 +1,8 @@
 import { Chart } from "react-google-charts";
 import PropTypes from 'prop-types';
 
-function Responses(props) {
-    const {stat, responses} = props.props;
+function Responses({props}) {
+    const {stat, responses} = props;
    
     if (stat.length > 0 && responses.length) {
         let obj = {

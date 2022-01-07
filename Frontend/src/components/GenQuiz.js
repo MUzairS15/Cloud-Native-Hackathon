@@ -1,10 +1,8 @@
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import PropTypes from 'prop-types';
 
-function GenQuiz (props) {
-
-    // const [resource, setResource] = useState([]);
-    const {data, handleSubmit, handleAdd} = props.prop;
+function GenQuiz ({prop}) {
+    const {data, handleSubmit, handleAdd} = prop;
     let formRef= useRef(null);
     
     // Add question to database (Act as Question Bank)
@@ -78,6 +76,8 @@ function GenQuiz (props) {
 }
 
 GenQuiz.propTypes = {
-    props: PropTypes.func
+    data: PropTypes.element,
+    handleSubmit: PropTypes.func,
+    handleAdd: PropTypes.func 
 }
 export default GenQuiz;

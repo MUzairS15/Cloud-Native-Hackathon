@@ -1,9 +1,8 @@
 import React from "react"
 import PropTypes from 'prop-types'
 
-function Login (props) {
-
-    const {handleSubmit} = props
+function Login ({prop}) {
+    const handleSubmit = prop
     return (
         <>
             <form id="forms" onSubmit={(e) => { handleSubmit(e) }}>
@@ -35,6 +34,6 @@ function Login (props) {
 }
 
 Login.propTypes = {
-    props: PropTypes.func
+    prop: PropTypes.func
 }
 export default Login

@@ -4,20 +4,8 @@
   "description": "This is the backend for Activity-Room ",
   "main": "server.js",
   "scripts": {
-    "test": "jest",
-    "start": "node server.js"
-  },
-  "jest": {
-  
-    "testPathIgnorePatterns": [
-      "/node_modules/",
-      "/jspm_packages"
-    ],
-    "unmockedModulePathPatterns": [
-
-      "<rootDir>/node_modules/fbjs",
-      "<rootDir>/node_modules/firebase"
-    ]
+    "start": "node server.js",
+    "dev" : "npx nodemon server.js"
   },
   "author": "Uzair",
   "license": "ISC",

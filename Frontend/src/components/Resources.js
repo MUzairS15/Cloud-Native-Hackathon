@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 
-const Resources = function () {
+function Resources () {
     let queSet = new Set(); //set of question to be sent to Question Bank
+    
     // To store question from Question Bank to display to user
     const [question, setQ] = useState([]); 
     useEffect(() => {
@@ -58,12 +59,12 @@ return (
             <button type="submit" onClick={handleSubmit} className=" d-flex btn btn-dark mt-3 " style={{ width: "max-content", "left": "-9rem" }}>Send</button>
         </div>
         <div className="d-flex flex-wrap" >
-            {question.map((question, ind) => (
+            {question.map((que, ind) => (
                 <div key={ind} className="card mx-3 my-1 " style={{ width: "max-content" }} >
                     <div id={ind} className="card-body flex-wrap" style={{ width: "18rem" }} onClick ={()=>{handleAdd(ind)}}>
                         <button style={{ position: "relative", left: "109px", top: "-16px" }}>more</button>
                         <p style={{ textAlign: "start" }}>Q.{ind + 1}</p>
-                        <h5>{question.question}</h5>
+                        <h5>{que.question}</h5>
                     </div>
                 </div>))}
         </div>

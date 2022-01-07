@@ -1,14 +1,15 @@
 import { useRef, useState } from "react";
-//Add a button to add to resource
-const GenQuiz = function (props) {
+import PropTypes from 'prop-types';
 
-    const [resource, setResource] = useState([]);
+function GenQuiz (props) {
+
+    // const [resource, setResource] = useState([]);
     const {data, handleSubmit, handleAdd} = props.prop;
     let formRef= useRef(null);
-
     
+    // Add question to database (Act as Question Bank)
     const handleClick = async function(){
-//send to database
+        
         let formData = [{
             "question" :formRef.current[0].value,
             "option1" : formRef.current[1].value,
@@ -19,7 +20,8 @@ const GenQuiz = function (props) {
         }];
         const code = localStorage.getItem('current-code');
         const sub = localStorage.getItem("current-sub");
-        if(code != undefined && sub != undefined) {
+
+        if(code !== null && sub !== null) {
 
             const response = 
             await fetch('/api/quiz/addQuestion', {
@@ -36,14 +38,12 @@ const GenQuiz = function (props) {
                     "type": "mcq"
                 })
             })
-            
-            const success = await response.json();
-            if (success === "success") {
+            const response2 = await response.json();
+            if (response2.success) {
                 alert('Posted Successfully');
             } else {
                 alert('Some error Occured');
             }
-            setResource(resource=>resource.concat(formData))
         } else {
             alert('Please select class from home section');
         } 
@@ -75,5 +75,9 @@ const GenQuiz = function (props) {
             </div>
         </div>
     )
+}
+
+GenQuiz.propTypes = {
+    props: PropTypes.func
 }
 export default GenQuiz;

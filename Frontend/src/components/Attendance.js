@@ -2,11 +2,11 @@ import QRCode from "qrcode.react";
 import { useEffect, useState } from "react";
 
 
-const Attendance = function () {
+function Attendance() {
 
-    let timer;
     const [time, setTime] = useState({ current: "" });
-        useEffect(()=>{
+    useEffect(()=>{
+            let timer;
             timer =  setTimeout(() => {
         let dt = new Date();
         let time = dt.getTime();

@@ -1,4 +1,6 @@
 const db = require('../database');
+
+// Get all students who have joined the current session, along with their details 
 exports.registered_students = async function(req, res){
 
     const registeredUsers = await db.collection("users").where('roomCode', '==', req.params.code).get();
@@ -16,6 +18,7 @@ exports.registered_students = async function(req, res){
         enrolled.push(temp); 
     });
     res.json({
-        "users": enrolled
+        "users": enrolled,
+        "success": true
     })
 }

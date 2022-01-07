@@ -10,28 +10,31 @@ const Code = function () {
         const response = await fetch('/api/classcode/addClass',{
             method: 'POST',
             headers:{
-                "auth-token": localStorage.getItem('auth-token'),
                 'Content-Type': 'application/json',
-                'Accept': 'application/json'
+                'Accept': 'application/json',
+                "auth-token": localStorage.getItem("auth-token")
             },
             body :JSON.stringify({
+                name:"",
                 sub:sub,
             }) 
         });
         const res = await response.json();
-        if(res.success === "success"){
+        if(res.success){
             alert('Posted Successfully');
+            setQr(res.code[0]);
         } else{
             alert('Some error Occured');
         }
-        setQr(res.code[0]);
     }
     let element;
     if(qr){
 
          element =  <QRCode style={{marginTop:"4rem"}} level ='M' value= {qr} />;
     }
-    const handleChange = function(event){  
+    const handleChange = function(event){
+        
+        
         setSub(event.target.value);
     }
     return (

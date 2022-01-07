@@ -1,13 +1,14 @@
 const db = require('../database');
-//Questions for LiveQuiz
+
+/*  Questions for LiveQuiz: 
+    Currently, Android App doesn't support recieving multiple questions for Quiz, hence name of doc "1" is set. 
+    Backend and dashboard supports sending multiple questions, when support is ready from app, 'add_live_question' needs to be refactored.
+*/
 exports.add_live_question = async function(req, res){
     
-    let index = 1;
     let q = req.body.question;
     let code = req.body.code;
-    console.log(code)
     for(let ind = 0; ind < q.length; ind++){
-        // console.log(q[ind].question)
         const doc = db.collection("classroom").doc(code).collection("questionLive").doc("1");
         await doc.set({
             question: q[ind].question,
@@ -23,28 +24,32 @@ exports.add_live_question = async function(req, res){
 };
     res.status(200).json(("success"));
 }
-//Questions for Question Bank
+
+/*
+    Questions for Question Bank.
+    Facilitator can add question related to respective Subject during their free time and during classes can send directly from Question Bank.
+*/
 exports.add_question = async function(req, res, next){
 
-    let q = req.body.question;
+    let que = req.body.question;
     let code = req.body.code;
-  console.log("reached")
-  for(let ind = 0; ind < q.length; ind++){
+  for(let ind = 0; ind < que.length; ind++){
       const codecollection = db.collection("classroom").doc(code).collection('currentResource');
       const subjectQue = codecollection.add({
-          question: q[ind].question,
-          option1 : q[ind].option1,
-          option2 : q[ind].option2,
-          option3 : q[ind].option3,
-          option4 : q[ind].option4,
-          correctAns : q[ind].correctAns,
+          question: que[ind].question,
+          option1 : que[ind].option1,
+          option2 : que[ind].option2,
+          option3 : que[ind].option3,
+          option4 : que[ind].option4,
+          correctAns : que[ind].correctAns,
           type: req.body.type,
           sub: req.body.sub
       });
-    //   await subjectQue.update({id: subjectQue.id});
     (await subjectQue).set({id: (await subjectQue).id},{merge:true});
     };
-    res.status(200).json(("success"));
+    res.status(200).json({
+        "success": true
+    });
 }
 
 //Get Question from Question Bank
@@ -54,10 +59,8 @@ exports.get_question_from_bank = async function(req, res){
     let questionBank = [];
     const questionResource = db.collection('classroom').doc(`${req.params.code}`).collection('currentResource');
     const resource = await questionResource.get();
-    console.log(resource);
     resource.forEach(doc => {
       let obj = {
-        // "id": doc.id,
         "question": doc.data().question,
         "option1" : doc.data().option1,
         "option2" : doc.data().option2,
@@ -67,10 +70,10 @@ exports.get_question_from_bank = async function(req, res){
         "type": doc.data().type,
         "sub": req.body.sub
       }
-      console.log(obj);
       questionBank.push(obj);
     });
     res.json({
-        "qBank" : questionBank
+        "qBank" : questionBank,
+        "success": true
     })
 }

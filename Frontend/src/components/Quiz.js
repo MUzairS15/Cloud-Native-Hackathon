@@ -8,25 +8,25 @@ import {
 } from "react-router-dom";
 import { Link } from "react-router-dom";
 
-const Quiz = function () {
+function Quiz () {
 
     const [dat, setData] = useState([]);
 
     const handleAdd = function (e) {
         e.preventDefault();
-        const q = document.getElementsByTagName("textarea")[0];
         const ele = new FormData(e.target);
         setData(dat => dat.concat(Object.fromEntries(ele)))
     }
 
     const handleDelete = function (e) {
-//del index taken to compare question as 2nd param contains value
         const newDat = dat.filter(function (delIndex, value) {
-            if (value == e.target.value)
+            if (value === e.target.value){
                 return false;
-            else return true;
+            }
+            else {
+                return true;
+            }
         })
-        console.log(newDat);
         setData(newDat);
     }
 
@@ -34,7 +34,7 @@ const Quiz = function () {
 
         const code = localStorage.getItem('current-code');
         const sub = localStorage.getItem("current-sub");
-        if(code != undefined && sub != undefined) {
+        if(code !== null && sub !== null) {
             const response = await fetch('/api/quiz/live/addQuestion', {
                 method: 'POST',
                 headers: {

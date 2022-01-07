@@ -1,9 +1,12 @@
 import React, { useState } from 'react'
+import { useHistory } from 'react-router-dom';
+
 import '../App.css'
 import Login from './Login';
 import SignUp from './SignUp';
-const Registration = function () {
+function Registration() {
 
+    let history = useHistory();
     const [signUp, isSignUp] = useState(false);
     const onChange = () => {
         isSignUp(!signUp);
@@ -13,17 +16,13 @@ const Registration = function () {
             setState("Login")
         }
         document.getElementById("forms").reset();
-        console.log("Clicked")
     }
     const [state, setState] = useState("Login")
     const handleSubmit = async function(e) {
-
         e.preventDefault();
-        console.log("Clicked")
         const ele = new FormData(e.target);
         const details = Object.fromEntries(ele);
-        console.log(details)
-        const response1 = await fetch('/login', {
+        const response1 = await fetch('/auth/login', {
             method: 'POST',
             headers: {
                 "Accept": "application/json",
@@ -37,13 +36,11 @@ const Registration = function () {
 
         })
         const response2 = await response1.json();
-        if (response2.error) {
-            alert(response2.error)
+        if (response2.success) {
+            localStorage.setItem("auth-token", response2.auth_token);
+            history.push("/");
         } else {
-            localStorage.setItem("auth-token", response2.auth_token)
-            var hiddenElement = document.createElement('a');
-            hiddenElement.href = '/';
-            hiddenElement.click();
+            alert(response2.error)
         }
     }
 
@@ -71,16 +68,16 @@ const Registration = function () {
     if (!signUp) {
         return (
             <>
-                <section class="sec1">
-                    <div class="title-page">
+                <section className="sec1">
+                    <div className="title-page">
                         <p>Activity Room</p>
                     </div>
-                    <div class="main-inputs login">
-                        <div class="choices">
+                    <div className="main-inputs login">
+                        <div className="choices">
                             <input type="radio" id="radio1" name="tabs" value="login" onChange={onChange} defaultChecked={state === "Login"}></input>
-                            <label id="lab1" for="radio1">Login</label>
+                            <label id="lab1" htmlFor="radio1">Login</label>
                             <input type="radio" id="radio2" name="tabs" value="signup" onChange={onChange} defaultChecked={state === "SignUp"}></input>
-                            <label id="lab2" for="radio2">Sign Up</label>
+                            <label id="lab2" htmlFor="radio2">Sign Up</label>
                         </div>
                         <Login handleSubmit={handleSubmit} />
                     </div>
@@ -91,16 +88,16 @@ const Registration = function () {
     else {
         return (
             <>
-                <section class="sec1">
-                    <div class="title-page">
+                <section className="sec1">
+                    <div className="title-page">
                         <p>Activity Room</p>
                     </div>
-                    <div class="main-inputs signup">
-                    <div class="choices">
+                    <div className="main-inputs signup">
+                    <div className="choices">
                         <input type="radio" id="radio1" name="tabs" value="login" onChange={onChange}></input>
-                        <label id="lab1" for="radio1">Login</label>
+                        <label id="lab1" htmlFor="radio1">Login</label>
                         <input type="radio" id="radio2" name="tabs" value="signup" onChange={onChange} ></input>
-                        <label id="lab2" for="radio2">Sign Up</label>
+                        <label id="lab2" htmlFor="radio2">Sign Up</label>
                     </div>
                     <SignUp handleCreate = {handleCreate} />
            </div>

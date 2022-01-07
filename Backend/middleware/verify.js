@@ -11,7 +11,6 @@ const verifyUser = function verifyUser(req, res, next){
 
         try{
             const data = jwt.verify(auth_token, privateKey);
-            // req.id = data.id;
             next();
         }
         catch{

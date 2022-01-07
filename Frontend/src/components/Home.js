@@ -1,42 +1,51 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
+import { useHistory } from 'react-router-dom';
 import Responses from './Responses';
 
 
-const Home = function () {
+function Home() {
 
-    const [subjectList, setSubjectList] = useState([]); 
+    const [subjectList, setSubjectList] = useState([]);
     const [students, setStudents] = useState([]);
-    const [qwStat, setqwStat] = useState([]) //if multiple question send then use but right now mobile app doent support this
-    const [stat, setStat] = useState(['sasd']);
-    // console.log("stat", stat)
-    const [responses, setResponses] = useState([''])
+    const [stat, setStat] = useState([]);
+    const [responses, setResponses] = useState([])
+    const history = useHistory();
+    let defaultValue = "Please select class code";
 
+    useEffect(() => {
+        getStudents();
+    }, [subjectList]);
+
+    const selectedCode = localStorage.getItem("current-code");
+    const selectedSubject = localStorage.getItem("current-sub");
+
+    // Get responses of students and create statistics (Responses component)
     const getResponse = async function fetchResponse() {
+        if (selectedCode !== null) {
+            const response2 = await fetch(`/api/responses/getstat/${selectedCode}`, {
+                headers: {
+                    "auth-token": localStorage.getItem('auth-token')
+                }
+            })
+            const student = await response2.json();
 
-    const response2 = await fetch(`/api/responses/getstat/${localStorage.getItem("current-code")}`, {
-        headers: {
-            "auth-token": localStorage.getItem('auth-token')
+            setResponses(student.responses);
+            setStat(student.stats);
         }
-    })
-    const student = await response2.json();
-
-    setResponses(student.responses);
-    setStat(student.stats);
-    setqwStat(students.stats)
     }
 
     const getStudents = async function fetchStudents() {
-        const response = await fetch(`/api/students/getStudents/${localStorage.getItem("current-code")}`, {
-            headers: {
-                "auth-token": localStorage.getItem('auth-token')
-            }
-        })
-    const registeredStudents = await response.json();
-       
-    setStudents(registeredStudents.users);
+        if (selectedCode !== null) {
+            const response = await fetch(`/api/students/getStudents/${selectedCode}`, {
+                headers: {
+                    "auth-token": localStorage.getItem('auth-token')
+                }
+            })
+            const registeredStudents = await response.json();
+            setStudents(registeredStudents.users);
+        }
     }
-    
-    async function fetchCodes() {
+    const fetchCodes = async function () {
 
         const response = await fetch(`/api/classcode/getCodes`, {
             headers: {
@@ -47,12 +56,8 @@ const Home = function () {
         setSubjectList(code.subcode);
     }
 
-    useEffect(() => {
-        getStudents();
-    }, [subjectList]);
 
     const handleChange = async function (e) {
-    
         let sub = e.target.value.split("-")[0].trim();
         let code = e.target.value.split("-")[1].trim();
         localStorage.setItem("current-sub", sub)
@@ -62,44 +67,45 @@ const Home = function () {
 
     const handleDownload = function () {
 
-        let values = [];
+        /* keys currently will have 'Name', 'Answered' (Attempted or not), 'PRN',
+         * 'Email', 'Time' (Time taken to answer each question).
+        */
         let keys = [];
+
+        let values = [];
 
         responses.forEach(function (val) {
             values.push(Object.values(val));
             keys.push(Object.keys(val));
         })
-        console.log(values);
-        console.log(keys);
-        var csv = `${keys[0]}\n`;
-        console.log(csv)
 
-        values.forEach(function (val) {
+        var csv = `${keys[0]}\n`;
+
+        // Parse the responses in valid CSV format
+        values.forEach((val) => {
             csv += val;
             csv += "\n";
         })
-        console.log(csv);
         document.write(csv);
+
+        // Button to download session record in csv format.
         var hiddenElement = document.createElement('a');
         hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
         hiddenElement.target = '_blank';
-        hiddenElement.download = `${localStorage.getItem('current-code')}Response.csv`;
+        hiddenElement.download = `${selectedCode}Response.csv`;
         hiddenElement.click();
         window.location.reload();
     }
 
     const handleGetResponse = async function () {
-       await  getResponse();
+        await getResponse();
     }
 
     const handleLogOut = function () {
-
         localStorage.clear();
-        var hiddenElement = document.createElement('a');
-        hiddenElement.href = '/';
-        hiddenElement.click();
+        history.push('/');
     }
-
+    
     return (
         <div>
             <div className="d-flex justify-content-end">
@@ -109,12 +115,14 @@ const Home = function () {
             </div>
             <div className="d-flex flex-column align-items-center">
                 <select id="select" onClick={fetchCodes} onChange={(e) => { handleChange(e) }} className="form-select my-3" aria-label="Default select example" style={{ width: "50%" }}>
-                    <option defaultValue>Please select</option>
-                    {subjectList.map((sub, ind) => (
-                        <option key={ind} value1={sub[0], sub[1]} value2={sub[1]} >{sub[0]} - {sub[1]}</option>
-                    ))}
+                    <option >{defaultValue}</option>
+                    {subjectList.length > 0 &&
+                        subjectList.map((sub, ind) => (
+                            <option key={ind} >{sub[0]} - {sub[1]}</option>
+                        ))
+                    }
                 </select>
-                <Responses props={{stat, responses}} />
+                <Responses props={{ stat, responses }} />
                 <div className="d-flex flex-wrap mx-4 my-3">
                     {students.map((student, ind) => (
                         <div key={ind} className="card mx-2 my-1" style={{ width: "18rem" }}>
@@ -124,7 +132,7 @@ const Home = function () {
                                 <p className="card-text">email: {student.email}</p>
                                 <p className="card-text">Subject: {student.roomSubject}</p>
                                 <p className="card-text">Score: {student.score}</p>
-                                <p className = "carrd-text"> Attendance: {student.Attendance}</p>
+                                <p className="carrd-text"> Attendance: {student.Attendance}</p>
                             </div>
                         </div>
                     ))}

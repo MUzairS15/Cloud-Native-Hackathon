@@ -3,12 +3,14 @@ kind: Service
 metadata: 
   name: front-svc
 spec:
-  type: LoadBalancer
+  type: NodePort
   selector:
     app: dashboard
     tier: frontend
   ports:
-    - protocol: TCP
+    - name: http
+      protocol: TCP
       port: 80
       targetPort: 80
+
   

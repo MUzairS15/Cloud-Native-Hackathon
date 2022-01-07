@@ -1,9 +1,9 @@
-// const { response } = require('express');
 const express = require('express');
 const router = express.Router();
-const verify = require('../middleware/verify');
-
 const responseController = require('../controller/response_controller');
-router.get('/getstat/:code', verify, responseController.get_stat)
+const { handleAsyncError } = require('../middleware/error');
+
+// get responses for the Quiz conducted and statistics for performance of whole class 
+router.get('/getstat/:code', handleAsyncError (responseController.get_stat));
 
 module.exports = router;

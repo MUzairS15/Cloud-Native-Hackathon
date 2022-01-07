@@ -1,9 +1,9 @@
-//1. Fetch Students from particular teacher
 const express = require('express');
 const registeredStudents = require('../controller/registered_students_controller');
+const { handleAsyncError } = require('../middleware/error');
 const router = express.Router();
-const verify = require('../middleware/verify')
 
-router.get('/getStudents/:code' , verify, registeredStudents.registered_students)
+// get Students who are currenttly attending the session
+router.get('/getStudents/:code' , handleAsyncError (registeredStudents.registered_students));
 
 module.exports = router;

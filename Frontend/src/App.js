@@ -6,7 +6,6 @@ import Quiz from './components/Quiz';
 import Home from './components/Home';
 import Attendance from './components/Attendance';
 import Registration from './components/Registration';
-// import { useHistory } from 'react-router-dom'
 
 import {
   BrowserRouter as Router,
@@ -18,7 +17,7 @@ function App() {
 
   if(localStorage.getItem("auth-token") != null){
     return (
-      <div className="App">
+        <div className="App">
         <Router>
         <NavBar />
         <Switch>

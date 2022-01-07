@@ -17,9 +17,7 @@ spec:
       containers:
        - name: admin-dashboard
          image: muzairs/classroom:latest
-         imagePullPolicy: Always
-         ports:
-          - containerPort: 80
+     
   
          
 

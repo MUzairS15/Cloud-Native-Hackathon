@@ -1,22 +1,21 @@
 import { Chart } from "react-google-charts";
+import PropTypes from 'prop-types';
 
-const Responses = function (props) {
+function Responses(props) {
     const {stat, responses} = props.props;
    
-    if (stat.length > 0) {
+    if (stat.length > 0 && responses.length) {
         let obj = {
             rec: []
         };
         obj.rec.push(['Question', 'correct'])
-        console.log("<>", stat)
-        console.log("dasdsads", stat[0])
-        obj.rec.push([`correct`, stat[0]])
-        obj.rec.push([`wrong`, stat[1]])
+        obj.rec.push(['correct', stat[0]])
+        obj.rec.push(['wrong', stat[1]])
         return (
             <>
                 <div className="card mx-3 my-1 " style={{ width: "max-content" }} >
                     <div className="card-body flex-wrap" style={{ width: "18rem" }}>
-                        <p style={{ textAlign: "start" }}>{stat.length} students answered correctly</p>
+                        <p style={{ textAlign: "start" }}>{stat[0]} students answered correctly</p>
                     </div>
                 </div>
                 <div style={{ position: "relative" }}>
@@ -35,8 +34,11 @@ const Responses = function (props) {
             </>
         )
     } else {
-        return <> </>
+       return <></>
     }
 }
-
+Responses.propTypes = {
+   stat : PropTypes.array,
+   responses: PropTypes.array
+}
 export default Responses;

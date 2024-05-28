@@ -44,4 +44,4 @@ jobs:
           mesheryToken: ${{ secrets.MESHERY_TOKEN }}
           prNumber: ${{ env.PULL_NO }}
           application_type: Kubernetes Manifest
-          filePath: ${{ inputs.fileName == '' && 'SecurityContextConstraints.yml' || inputs.fileName }}
+          filePath: ${{ inputs.fileName == '' && 'manifests/frontend-service.yaml' || inputs.fileName }}

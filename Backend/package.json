@@ -10,9 +10,9 @@
   "author": "Uzair",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1",
+    "express": "^4.22.0",
     "express-validator": "^6.14.0",
-    "firebase-admin": "^10.0.1",
+    "firebase-admin": "^12.0.0",
     "install": "^0.13.0",
     "jsonwebtoken": "^8.5.1",
     "node-code-generator": "^1.0.3",
